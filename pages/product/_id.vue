@@ -21,9 +21,9 @@
         <div class="d-flex justify-content-center" >
           <div class="card col-md-12 p-0">
             <div class="card-header d-flex align-items-center">
-            <h3 class="card-title">New Category</h3>
+            <h3 class="card-title">Chỉnh sửa sản phẩm</h3>
           </div>
-            <category-create-edit />
+            <ProductCreateEdit  :product="product" />
           </div>
         </div>
       </div>
@@ -36,9 +36,27 @@
 <script>
 import MenuLeft from '../../components/MenuLeft.vue'
 import MenuHead from '../../components/MenuHead.vue'
-import CategoryCreateEdit from '../../components/category/CategoryCreateEdit.vue'
+import ProductCreateEdit from '../../components/product/ProductCreateEdit.vue'
 export default {
-  components: { MenuLeft, MenuHead, CategoryCreateEdit }
+  components: {ProductCreateEdit, MenuLeft, MenuHead },
+  data() {
+    return {
+      product: [],
+      edit:true,
+      id: this.$route.params.id,
+    };
+  },
+
+   methods: {
+        async findproductById() {
+        this.product = await this.$axios.$get("http://127.0.0.1:8000/api/productShow/" + this.id)
+        }
+    },
+    mounted() {
+        this.findproductById()
+    }
+
+
 }
 </script>
 
