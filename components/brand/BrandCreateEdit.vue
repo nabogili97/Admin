@@ -26,6 +26,20 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-3 col-form-label">Hình ảnh : </label>
+                <div class="col-sm-9 file-img">
+                     <input accept="image/*"  type="file" ref="fileUpload" @change="previewFiles($event)"  class="form-control" name="image" id="image">
+                        <img
+                            class="brand-img"
+                            alt=""
+                            :src="newImage || 'http://127.0.0.1:8000/' + brand.image"
+                    />
+                    <div id="preview" class="file-img">
+                        <img v-if="url" :src="url" />
+                    </div>
+                </div>
+            </div>
             <div class="form-submit">
                 <div class="form-group text-center p-3">
                     <button class="btn btn-success" @click.prevent="submitData">Lưu</button>
@@ -43,9 +57,24 @@ export default {
             error: [],
             brandId: this.$route.params.edit,
             id: this.$route.params.id,
+            url:'',
+            newImage: "",
+            brand:{
+                name: '',
+                status:''
+            }
         }
     },
     methods: {
+        async previewFiles(event) {
+            const file = event.target.files[0];
+
+            const theReader = new FileReader();
+            theReader.onloadend = async () => {
+                this.newImage = await theReader.result;
+            };
+            theReader.readAsDataURL(file);
+        },
         async submitData() {
             this.error = [];
 
@@ -59,9 +88,28 @@ export default {
 
             if (!this.error.length) {
                 if (this.id) {
-                    await this.$axios.$put('http://127.0.0.1:8000/api/brand/update/' + this.id, this.brand)
-                    return this.$router.push('/brand')
-                }
+
+                    let formData = new FormData();
+                    formData.append('name', this.brand.name);
+                    formData.append('status', this.brand.status);
+
+                    if(document.getElementById('image').files[0]) {
+                        formData.append('image',document.getElementById('image').files[0]);
+                    }
+
+                    formData.append("_method", "PUT");
+
+                    await this.$axios.$post('http://127.0.0.1:8000/api/brand/update/'+ this.id, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(res => {
+                        this.$refs.fileUpload.value="";
+                        alert("Cập nhật thành công !")
+                        return this.$router.push('/brand')
+                    })
+                    }
             }  
         },
 
@@ -73,3 +121,16 @@ export default {
     
 }
 </script>
+<style scoped>
+.brand-img img {
+    max-height: 200px;
+    height: auto;
+    object-fit: cover;
+}
+
+.file-img img {
+    max-height: 200px;
+    height: auto;
+    object-fit: cover;
+}
+</style>

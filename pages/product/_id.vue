@@ -12,9 +12,9 @@
         <div class="row align-items-center">
           <div class="col">
             <ol class="breadcrumb my-3">
-              <li class="breadcrumb-item active">Home</li>
-              <li class="breadcrumb-item active">User</li>
-              <li class="breadcrumb-item active">New</li>
+              <li class="breadcrumb-item active">Trang chủ</li>
+              <li class="breadcrumb-item active">Sản phẩm</li>
+              <li class="breadcrumb-item active">Chỉnh sửa</li>
             </ol>
           </div>
         </div>
@@ -41,7 +41,7 @@ export default {
   components: {ProductCreateEdit, MenuLeft, MenuHead },
   data() {
     return {
-      product: [],
+      product: {},
       edit:true,
       id: this.$route.params.id,
     };
@@ -49,7 +49,8 @@ export default {
 
    methods: {
         async findproductById() {
-        this.product = await this.$axios.$get("http://127.0.0.1:8000/api/productShow/" + this.id)
+          this.pro = await this.$axios.$get("http://127.0.0.1:8000/api/product/show/" + this.id)
+          return this.product = this.pro.data
         }
     },
     mounted() {

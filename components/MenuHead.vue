@@ -1,8 +1,17 @@
 <template>
     <div class="menu-head ">
-        <div class="d-flex justify-content-end pt-2">
-            <div class="pr-3 pl-0 ">Xin chào <b>Admin</b></div>
-            <div class="pr-4"><font-awesome-icon :icon="['fas', 'angle-down']"  /></div>
+        <div class="d-flex justify-content-end ">
+            <div class="pr-3 pl-0 ">
+                <div v-if="$auth.loggedIn"  >
+                   <span>Hello <b>{{$auth.user.name}}</b></span>
+                        <b-dropdown id="dropdown-right" right variant="infor" class="m-2">
+                            <b-dropdown-item href="#"> <a @click.prevent="logout" type="submit" class="btn btn-primary">Đăng Xuất</a></b-dropdown-item>
+                        </b-dropdown>
+                </div>
+                <p v-if="!$auth.loggedIn">
+                    <a href="/login">Login</a>
+                </p>
+            </div>
         </div>
     </div>
 </template>
@@ -10,6 +19,12 @@
 export default {
     setup() {
         
+    },
+    methods: {
+        logout() {
+            this.$auth.logout();
+            return this.$router.push('/login')
+        },
     },
 }
 </script>

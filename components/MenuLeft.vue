@@ -12,6 +12,7 @@
                 <li><a href="/order/"><font-awesome-icon :icon="['fas', 'book']"  /> Đơn hàng</a></li>
                 <li><a href="/user/"><font-awesome-icon :icon="['fas', 'users']"  /> Thành viên</a></li>
                 <li><a href="/categories/"><font-awesome-icon :icon="['fas', 'book']"  /> Danh mục</a></li>
+                <li><a href="/post/"><font-awesome-icon :icon="['fas', 'book']"  />Bài viết</a></li>
             </ul>
         </div>
     </div>

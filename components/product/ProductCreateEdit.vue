@@ -1,34 +1,41 @@
 <template>
     <div  class="">
-        <form   v-for="(item, key) in product" :key="key" class="p-3">
+        <form class="p-3">
             <p v-if="error.length > 0">
                 <ul>
                     <li class="text-danger" v-for="(aleft, index) in error" :key="index">{{ aleft }}</li>
                 </ul>
             </p>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Ảnh : </label>
-                <div class="col-sm-9 product-img" >
-                    <img 
-                        :src="item.image"
-                    >
+                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Trạng thái : </label>
+                <div class="col-sm-10 col-9 brand-img">
+                    <div id="preview" class="file-img">
+                        <img v-if="url" :src="url" />
+                    </div>
+                    <img
+                            class="brand-img"
+                            alt=""
+                            :src="newImage || 'http://127.0.0.1:8000/' + product.image"
+                    />
+                    <input accept="image/*"  type="file" ref="fileUpload" @change="previewFiles($event)"  class="form-control" name="image" id="image">
+                        
+                    
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Tên : </label>
-                <div class="col-sm-9" >
+                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Tên : </label>
+                <div class="col-sm-10 col-9" >
                     <input 
                         type="text"
                         class="form-control"
-                        placeholder="Giày sneaker"
-                        v-model="item.name"
+                        v-model="product.name"
                     >
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Danh mục : </label>
-                <div class="col-sm-9">
-                    <select v-model="item.category_id" class="custom-select custom-select-sm">
+                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Danh mục : </label>
+                <div class="col-sm-10 col-9">
+                    <select v-model="product.category_id" class="custom-select custom-select-sm">
                         <option value="1"> Cao cổ</option>
                         <option value="2"> Thấp cổ</option>
                         <option value="3"> Giày da</option>
@@ -36,9 +43,9 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Thương hiệu : </label>
-                <div class="col-sm-9">
-                    <select v-model="item.brand_id" class="custom-select custom-select-sm">
+                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Thương hiệu : </label>
+                <div class="col-sm-10 col-9">
+                    <select v-model="product.brand_id" class="custom-select custom-select-sm">
                         <option value="1">Gucci</option>
                         <option value="2">Nike</option>
                         <option value="3">Vans</option>
@@ -48,54 +55,65 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Giá nhập : </label>
-                <div class="col-sm-9" >
+                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Giá nhập : </label>
+                <div class="col-sm-10 col-9" >
                     <input 
                         type="text"
                         class="form-control"
                         placeholder="Giày sneaker"
-                        v-model="item.price"
+                        v-model="product.price"
                     >
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Giá bán : </label>
-                <div class="col-sm-9" >
+                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Giá bán : </label>
+                <div class="col-sm-10 col-9" >
                     <input 
                         type="text"
                         class="form-control"
                         placeholder="Giày sneaker"
-                        v-model="item.retail_price"
+                        v-model="product.retail_price"
                     >
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Mô tả : </label>
-                <div class="col-sm-9" >
+                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Số lượng : </label>
+                <div class="col-sm-10 col-9" >
+                    <input 
+                        type="text"
+                        class="form-control"
+                        placeholder="Giày sneaker"
+                        v-model="product.qty"
+                    >
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Mô tả : </label>
+                <div class="col-sm-10 col-9" >
                     <textarea 
                         type="text"
                         class="form-control"
                         placeholder="Giày sneaker"
-                        v-model="item.description"
+                        v-model="product.description"
                      />
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Nội dung : </label>
-                <div class="col-sm-9" >
+                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Nội dung : </label>
+                <div class="col-sm-10 col-9" >
                     <textarea 
                         type="text"
                         class="form-control"
                         placeholder="Giày sneaker"
-                        v-model="item.content"
+                        v-model="product.content"
                      />
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Trạng thái : </label>
-                <div class="col-sm-9">
-                    <select v-model="item.status" class="custom-select custom-select-sm">
+                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Trạng thái : </label>
+                <div class="col-sm-10 col-9">
+                    <select v-model="product.status" class="custom-select custom-select-sm">
                         <option value="0"> Vô hiệu hóa</option>
                         <option value="1"> Kích hoạt</option>
                     </select>
@@ -111,16 +129,31 @@
     </div>
 </template>
 <script>
+// import Vue from 'vue'
+// import VueFileAgent from 'vue-file-agent'
+// import VueFileAgentStyles from 'vue-file-agent/dist/vue-file-agent.css'
+// Vue.use(VueFileAgent)
 export default {
     props:["product", "edit"],
+
     data() {
         return {
             error: [],
             proId: this.$route.params.edit,
             id: this.$route.params.id,
+            newImage: ""
         }
     },
     methods: {
+        async previewFiles(event) {
+            const file = event.target.files[0];
+
+            const theReader = new FileReader();
+            theReader.onloadend = async () => {
+                this.newImage = await theReader.result;
+            };
+            theReader.readAsDataURL(file);
+        },
         async submitData() {
             this.error = [];
 
@@ -152,16 +185,47 @@ export default {
                 this.error.push("Nội dung sản phẩm không được để trống");
             }
 
+            if (!this.product.qty) {
+                this.error.push("Số lượng sản phẩm không được để trống");
+            }
+
             if (!this.product.status) {
                 this.error.push("Trạng thái không được để trống");
             }
 
             if (!this.error.length) {
                 if (this.id) {
-                    await this.$axios.$put('http://127.0.0.1:8000/api/product/update/' + this.id, this.product)
-                    return this.$router.push('/product')
+
+                    let formData = new FormData();
+                    formData.append('name', this.product.name);
+                    formData.append('category_id', this.product.category_id);
+                    formData.append('brand_id', this.product.brand_id);
+                    formData.append('price', this.product.price);
+                    formData.append('qty', this.product.qty);
+                    formData.append('retail_price', this.product.retail_price);
+                    formData.append('description', this.product.description);
+                    formData.append('content', this.product.content);
+                    formData.append('status', this.product.status);
+
+                    if(document.getElementById('image').files[0]) {
+                        formData.append('image',document.getElementById('image').files[0]);
+                    }
+
+                    formData.append("_method", "PUT");
+
+                    await this.$axios.$post('http://127.0.0.1:8000/api/product/update/'+ this.id, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(res => {
+                        this.$refs.fileUpload.value="";
+                        alert("Cập nhật thành công !")
+                        return this.$router.push('/product')
+                    })
                 }
             }  
+             
         },
 
         cancel() {
@@ -177,5 +241,10 @@ export default {
 .product-img img {
     max-width: 300px;
     height: auto;
+}
+.brand-img img {
+    max-height: 200px;
+    height: auto;
+    object-fit: cover;
 }
 </style>

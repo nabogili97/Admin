@@ -14,7 +14,7 @@
                             v-model="name"
                         >
                     </div>
-                    <div class="form-group col-md-6">
+                    <!-- <div class="form-group col-md-6">
                         <input 
                             type="text"
                             class="form-control"
@@ -37,7 +37,7 @@
                             placeholder="Hãy nhập địa chỉ..."
                             v-model="phone"
                         >
-                    </div>
+                    </div> -->
                     <div class="col-md-3">
                         <button type="button" class="btn btn-primary"  @click="searchUser" >Tìm kiếm</button>
                     </div>

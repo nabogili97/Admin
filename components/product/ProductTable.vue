@@ -6,119 +6,127 @@
                 <div v-if="myModal" class="modal">
                     <transition name="model" class="modal-form">
                         <div class="modal-mask">
-                            <form  @submit.prevent="onSubmit"   class="p-3 cate-form">
+                            <form  @submit="formSubmit"   class="p-3 cate-form">
+                                <div class="border-bottom pb-1 mb-3">
+                                    <h3>Thêm sản phẩm</h3>
+                                </div>
                                 <p v-if="error.length > 0">
                                     <ul>
                                         <li class="text-danger" v-for="(aleft, index) in error" :key="index">{{ aleft }}</li>
                                     </ul>
                                 </p>
-                                <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Ảnh : </label>
-                                    <div class="col-sm-9 product-img" >
-                                        <input  type="text"  v-model="product.image" >
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Tên : </label>
-                                    <div class="col-sm-9"  >
-                                        <input 
-                                            type="text"
-                                            class="form-control"
-                                            placeholder="Giày sneaker"
-                                            v-model="product.name"
-                                        >
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Danh mục : </label>
-                                    <div class="col-sm-9">
-                                        <select v-model="product.category_id" class="custom-select custom-select-sm">
-                                            <option value="1"> Cao cổ</option>
-                                            <option value="2"> Thấp cổ</option>
-                                            <option value="3"> Giày da</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Thương hiệu : </label>
-                                    <div class="col-sm-9">
-                                        <select v-model="product.brand_id" class="custom-select custom-select-sm">
-                                            <option value="1">Gucci</option>
-                                            <option value="2">Nike</option>
-                                            <option value="3">Vans</option>
-                                            <option value="4">Louis Vuition</option>
-                                            <option value="5">Converse</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Giá nhập : </label>
-                                    <div class="col-sm-9" >
-                                        <input 
-                                            type="nummber"
-                                            class="form-control"
-                                            placeholder="5.000.000"
-                                            v-model="product.price"
-                                        >
-                                    </div>
-                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-12 border-right">
+                                        <div class="form-group row">
+                                            <label  class="col-sm-3 col-3 col-form-label">Ảnh : </label>
+                                            <div class="col-sm-9 col-9 product-img" >
+                                                <input accept="image/*" type="file" @change="previewFiles($event)" class="form-control" v-on:change="onChange">
+                                                <img
+                                                    class="brand-img"
+                                                    alt=""
+                                                    :src="newImage || 'https://www.namepros.com/attachments/empty-png.89209/'"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-3 col-form-label">Tên : </label>
+                                            <div class="col-sm-9 col-9"  >
+                                                <input 
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Giày sneaker"
+                                                    v-model="name"
+                                                >
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-3 col-form-label">Danh mục : </label>
+                                            <div  class="col-sm-9 col-9" >
+                                                <select v-model="category_id" class="custom-select custom-select-sm">
+                                                    <option  v-for="(item, key) in cateList.data" :key="key" :value="item.id">{{item.name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-3 col-form-label">Thương hiệu : </label>
+                                            <div  class="col-sm-9 col-9" >
+                                                <select v-model="brand_id" class="custom-select custom-select-sm">
+                                                    <option  v-for="(item, key) in brandList.data" :key="key" :value="item.id">{{item.name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label  class="col-sm-3 col-3 col-form-label">Giá nhập : </label>
+                                            <div class="col-sm-9 col-9" >
+                                                <input 
+                                                    type="nummber"
+                                                    class="form-control"
+                                                    placeholder="5.000.000"
+                                                    v-model="price"
+                                                >
+                                            </div>
+                                        </div>
 
+                                        <div class="form-group row">
+                                            <label  class="col-sm-3 col-3 col-form-label">Giá bán : </label>
+                                            <div class="col-sm-9 col-9" >
+                                                <input 
+                                                    type="number"
+                                                    class="form-control"
+                                                    placeholder="7.000.000"
+                                                    v-model="retail_price"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+                                <div class="col-md-6 col-12">
                                 <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Giá bán : </label>
-                                    <div class="col-sm-9" >
+                                    <label  class="col-sm-3 col-3 col-form-label">Số lượng : </label>
+                                    <div class="col-sm-9 col-9" >
                                         <input 
                                             type="number"
                                             class="form-control"
-                                            placeholder="7.000.000"
-                                            v-model="product.retail_price"
+                                            placeholder="100"
+                                            v-model="qty"
                                         >
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Số lượng : </label>
-                                    <div class="col-sm-9" >
-                                        <input 
-                                            type="number"
-                                            class="form-control"
-                                            placeholder="7.000.000"
-                                            v-model="product.qty"
-                                        >
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Mô tả : </label>
-                                    <div class="col-sm-9" >
+                                    <label  class="col-sm-3 col-3 col-form-label ">Mô tả : </label>
+                                    <div class="col-sm-9 col-9" >
                                         <textarea 
                                             type="text"
-                                            class="form-control"
+                                            class="form-control description"
                                             placeholder="Thiết kế lạ mắt ..."
-                                            v-model="product.description"
+                                            v-model="description"
                                         />
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Nội dung : </label>
-                                    <div class="col-sm-9" >
+                                    <label  class="col-sm-3 col-3 col-form-label">Nội dung : </label>
+                                    <div class="col-sm-9 col-9" >
                                         <textarea 
                                             type="text"
-                                            class="form-control"
+                                            class="form-control description"
                                             placeholder="Content...."
-                                            v-model="product.content"
+                                            v-model="content"
                                         />
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Trạng thái : </label>
-                                    <div class="col-sm-9">
-                                        <select v-model="product.status" class="custom-select custom-select-sm">
+                                    <label  class="col-sm-3 col-3 col-form-label">Trạng thái : </label>
+                                    <div class="col-sm-9 col-9">
+                                        <select v-model="status" class="custom-select custom-select-sm">
                                             <option value="0"> Vô hiệu hóa</option>
                                             <option value="1"> Kích hoạt</option>
                                         </select>
                                     </div>
                                 </div>
+                                    </div>
+                                </div>
                                 <div class="form-submit">
                                     <div class="form-group text-center p-3">
-                                        <button class="btn btn-success" @click.prevent="submitData">Lưu</button>
+                                        <button class="btn btn-success">Lưu</button>
                                         <button class="btn btn-primary"  @click="closeModal">Hủy</button>
                                     </div>
                                 </div>
@@ -143,13 +151,13 @@
                         <th scope="col">Giá</th>
                         <th scope="col">Số lượng</th>
                         <th scope="col">Trạng thái </th>
-                        <th scope="col" class="text-right pr-5">Thao tác</th>
+                        <th  v-if="$auth.user.role == 2"  scope="col" class="text-right pr-5">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, key) in products" :key="key">
+                    <tr v-for="(item, key) in products" :key="key" v-bind:class="[{bgred: item.qty < 10}]">
                         <th scope="row">{{key+1}}</th>
-                        <td class="product-image"><img :src="item.image"></td>
+                        <td class="product-image"><img :src="'http://127.0.0.1:8000/' + item.image"></td>
                         <td>{{item.name}}</td>
                         <td>{{formatPrice(item.retail_price)}} VNĐ </td>
                         <td>{{item.qty}}</td>
@@ -157,13 +165,14 @@
                             Vô hiệu hóa
                         </td>
                         <td v-else>Kích hoạt</td>
-                        <td class="operation text-right">
+                        <td  v-if="$auth.user.role == 2"  class="operation text-right">
                             <NuxtLink
+                            
                                 :to="'/product/' + item.id"
                                 class="btn btn-outline-primary btn-sm"
                                 >
                                 <font-awesome-icon :icon="['fas', 'edit']"  />Edit
-                            </NuxtLink> |
+                            </NuxtLink>
                             <button type="button" class="btn btn-primary btn-sm" @click="onDelete(item.id)">
                                 <font-awesome-icon :icon="['fas', 'trash-alt']"  /> 
                                 Xóa
@@ -172,44 +181,10 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- <div>
-                <p>Current page: {{ currentPage }}</p>
-                <v-pagination v-model="currentPage"
-                    :page-count="totalPages"
-                    :classes="bootstrapPaginationClasses"
-                    :labels="paginationAnchorTexts"
-                    :click-handler="changePage"
-                    >
-                </v-pagination>
-            </div> -->
         </div>
-        <!-- <div>
-            <div>
-                <h6>Trang</h6>
-                <b-pagination v-model="currentPage" pills :total-rows="rows" size="sm"></b-pagination>
-            </div>
-            <div>
-                Test
-               <Page :total="100" />
-            </div>
-        </div> -->
-
-        <div class="border-bottom">
-            <Pagination :records="15" v-model="page" :per-page="5" @paginate="callback" />
-        </div> 
-
-        <!-- 
-        <v-pagination
-            v-model="pagination.current"
-            :length="pagination.total"
-            @input="onPageChange"
-        ></v-pagination> -->
-
-
     </div>
 </template>
 <script>
-import Pagination from 'vue-pagination-2';
 export default {
     props: {
         products: {
@@ -222,54 +197,70 @@ export default {
             default: () => false
         }
     },
-    components: {
-        Pagination
-    },
     data() {
         return {
+            selectFile: null,
             loading: false,
             modal: false,
             // id: this.$route.params.id,
-            product: {
-                name: '',
-                category_id:"",
-                brand_id:"",
-                price:"",
-                retail_pridce: "",
-                description: "",
-                content:"",
-                status: ''
-            },
+            name: '',
+            file: '',
+            success: '',
+            path:'',
+            image:'',
+            category_id: '',
+            brand_id:'',
+            price:'',
+            retail_price:'',
+            description:'',
+            qty:'',
+            content:'',
+            status:'',
+            error:'',
             products:[],
             myModal: false,
             error:[],
-            rows: 100,
-            currentPage: 1,
-            totalPages: 30,
-            bootstrapPaginationClasses: {
-                ul: 'pagination',
-                li: 'page-item',
-                liActive: 'active',
-                liDisable: 'disabled',
-                button: 'page-link'  
-            },
-            paginationAnchorTexts: {
-                first: 'First',
-                prev: 'Previous',
-                next: 'Next',
-                last: 'Last'
-            },
-            pagination: {
-                current: 1,
-                total: 0
-            },
-            page: 1
+            cateList:[],
+            brandList:[],
+            newImage: ""
         }
     },
+
     mounted(){
         this.list()
     },
+
+    async fetch() {
+        this.cateList = await fetch(
+        'http://127.0.0.1:8000/api/categories'
+      ).then(res => res.json())
+
+      this.brandList = await fetch(
+        'http://127.0.0.1:8000/api/brands'
+      ).then(resp => resp.json())
+    },
+
     methods: {
+        async previewFiles(event) {
+            const file = event.target.files[0];
+
+            const theReader = new FileReader();
+            theReader.onloadend = async () => {
+                this.newImage = await theReader.result;
+            };
+            theReader.readAsDataURL(file);
+        },
+        
+
+        //  getPhoto(photo){
+        //     return "/gate/profile/photo"+photo;
+        // },
+
+
+        onFileChange(e){
+            this.product.image = e.target.files[0];
+        },
+
         callback: function(page) {
             console.log(`Page ${page} was selected. Do something about it`);
         },
@@ -290,51 +281,80 @@ export default {
                 location.reload();
             }
         },
-        async submitData() {
+        onChange(e) {
+                this.file = e.target.files[0];
+            },
+        formSubmit(e) {
             this.error = [];
 
-            if (!this.product.name) {
+            if (!this.name) {
                 this.error.push("Tên không được để trống");
             }
 
-            if (!this.product.category_id) {
+            if (!this.category_id) {
                 this.error.push("Danh mục không được để trống");
             }
 
-            if (!this.product.brand_id) {
+            if (!this.brand_id) {
                 this.error.push("Thương hiệu không được để trống");
             }
 
-            if (!this.product.price) {
+            if (!this.price) {
                 this.error.push("Giá bán không được để trống");
             }
 
-            if (!this.product.retail_price) {
+            if (!this.retail_price) {
                 this.error.push("Giá bán không được để trống");
             }
 
-            if (!this.product.description) {
+            if (!this.qty) {
+                this.error.push("Số lượng không được để trống");
+            }
+
+            if (!this.description) {
                 this.error.push("Mô tả không được để trống");
             }
 
-            if (!this.product.content) {
+            if (!this.content) {
                 this.error.push("nội dung không được để trống");
             }
 
-            if (!this.product.status) {
+            if (!this.status) {
                 this.error.push("Trạng thái không được để trống");
             }
 
-            if (!this.error.length) {
-                if (this.id) {
-                    await this.$axios.$put('http://127.0.0.1:8000/api/product/update/' + this.id, this.product)
-                    this.myModal = false;
-                    location.reload();
+            e.preventDefault();
+            let existingObj = this;
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
                 }
-                await this.$axios.$post('http://127.0.0.1:8000/api/product/store', this.product)
-                this.myModal = false;
-                location.reload();
             }
+
+            if (!this.error.length) {
+                let data = new FormData();
+                data.append('file', this.file);
+                data.append('name', this.name);
+                data.append('category_id', this.category_id);
+                data.append('brand_id', this.brand_id);
+                data.append('price', this.price);
+                data.append('retail_price', this.retail_price);
+                data.append('description', this.description);
+                data.append('content', this.content);
+                data.append('qty', this.qty);
+                data.append('status', this.status);
+                this.$axios.$post('http://127.0.0.1:8000/api/upload/', data, config)
+                .then(function (res) {
+                    existingObj.success = res.data.success;
+                })
+                .catch(function (err) {
+                    existingObj.output = err;
+                });
+            }
+            this.myModal = false;
+            alert("Thêm sản phẩm thành công !")
+            window.location.href = "/product";
+            
         },
 
         closeModal(){
@@ -380,18 +400,54 @@ a {
     display: flex;
     flex-direction: column;
 } 
-
-.cate-form {
-    border-radius: 5px;
-    padding: 20px;
-    width: 800px;
-    background-color: white;
+@media screen and (min-width: 375px) {
+    .cate-form {
+        border-radius: 5px;
+        width: 550px;
+        background-color: white;
+    }
+    .modal {
+    position: fixed;
+    top: 10px;
+    bottom: 0;
+    left: 0px;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} 
 }
+
+@media screen and (min-width: 920px) {
+    .cate-form {
+        border-radius: 5px;
+        padding: 20px;
+        width: 1300px;
+        background-color: white;
+    }
+}
+
 
 .product-image img {
     max-width: 100px;
     height: auto;
     object-fit: cover;
+}
+
+.description {
+    height: 121px;
+}
+
+.brand-img {
+    max-width: 150px;
+    height: 100px;
+    object-fit: cover;
+    
+}
+
+.bgred {
+    background-image: linear-gradient(#ffecd2, #fcb69f);
 }
 
 </style>

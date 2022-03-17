@@ -6,7 +6,7 @@
                     <div class="card-block">
                         <div class="row">
                             <div class="col-8">
-                                <h3>199</h3>
+                                <h3>15</h3>
                                 <h5>Sản phẩm</h5>
                             </div>
                             <div class="col-4 das-icon">
@@ -21,7 +21,7 @@
                     <div class="card-block">
                         <div class="row">
                             <div class="col-8">
-                                <h3>250</h3>
+                                <h3>2</h3>
                                 <h5>Đơn hàng</h5>
                             </div>
                             <div class="col-4 das-icon">
@@ -51,7 +51,7 @@
                     <div class="card-block">
                         <div class="row">
                             <div class="col-8">
-                                <h3>99</h3>
+                                <h3>2</h3>
                                 <h5>Người dùng</h5>
                             </div>
                             <div class="col-4 das-icon">

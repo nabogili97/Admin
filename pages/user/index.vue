@@ -11,6 +11,17 @@
         <div class="pl-5 pr-5 pt-5 pb-0">
           <UserSearchForm v-on:name="searchUser"   />
           <UserTable :users="users" :loading="loading" />
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item" v-bind:class="[{disabled: !panigation.prev_page_url}]">
+                <a @click="fetchUsers(panigation.prev_page_url)" class="page-link" href="#">Trang trước</a>
+              </li>
+              <li class="page-item disabled"><a class="page-link " >Trang {{panigation.current_page}} - {{panigation.last_page}}</a></li>
+              <li class="page-item" v-bind:class="[{disabled: !panigation.next_page_url}]">
+                <a  @click="fetchUsers(panigation.next_page_url)" class="page-link" href="#">Trang sau</a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
@@ -33,26 +44,41 @@ export default {
       total: 0,
       currentPage: 0,
       perPage: 10,
-      totalItems: 0
+      totalItems: 0,
+      panigation:{}
     }),
 
     mounted () {
-      this.fetch()
       this.loading = true
-  //  this.list()
+    },
+
+    created() {
+      this.fetchUsers();
     },
 
     methods: {
-      async fetch(page) {
-          this.loading = true
-          if (typeof page === "undefined") {
-            page = 1;
-          }
-          const res = this.cate = await fetch("http://127.0.0.1:8000/api/users?page=" + page + "&limit=5").then(res => res.json());
+       fetchUsers(page_url) {
+        const vm = this;
+        page_url = page_url || 'http://127.0.0.1:8000/api/users';
+        this.loading = true
+        fetch(page_url)
+        .then(res=>res.json())
+        .then(res=> {
+          this.users = res.data;
+          vm.makePagination(res.meta, res.links);
           this.loading = false
-          this.total = res.to
-          return this.users = res.data
-        },
+        })
+      },
+
+      makePagination(meta, links) {
+        const pagination = {
+          current_page: meta.current_page,
+          last_page: meta.last_page,
+          next_page_url: links.next,
+          prev_page_url: links.prev
+        }
+        this.panigation = pagination
+      },
 
         searchUser(keywork) {
           this.loading = true

@@ -44,14 +44,40 @@ export default {
     // https://go.nuxtjs.dev/bootstrap
     'bootstrap-vue/nuxt',
     '@nuxtjs/axios',
+    '@nuxtjs/auth'
   ],
-  axios: {
 
+  axios: {
+    baseURL: 'http://127.0.0.1:8000/api/'
+  },
+
+  auth: {
+    redirect: {
+      callback: '/dasboard' //sau khi login sẽ chuyển hướng về đây
+    },
+    strategies: {
+      local: {
+        endpoints: {
+          // các đường dẫn đến API
+          // propertyName: kết quả từ API trả về, nhớ xem kết quả để đặt key cho đúng
+          login: { url: '/auth/login', method: 'post', propertyName: 'meta.token' },
+
+          register: { url: '/auth/register', method: 'post', propertyName: 'meta.token' },
+          // sau khi login, sẽ tự động chạy cái API này nữa để lấy dữ liệu user
+          user: { url: '/auth/user', method: 'get', propertyName: 'data' },
+          logout: false
+        }
+      },
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  },
+
+  router: {
+    middleware: ['auth']
+  },
 
   
 }

@@ -60,7 +60,7 @@
                         <th scope="col">STT</th>
                         <th scope="col">Tên </th>
                         <th scope="col">Trạng thái </th>
-                        <th scope="col" class="text-right pr-5">Thao tác</th>
+                        <th  v-if="$auth.user.role == 2"  scope="col" class="text-right pr-5">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,14 +71,14 @@
                             Vô hiệu hóa
                         </td>
                         <td v-else>Kích hoạt</td>
-                        <td class="operation text-right">
+                        <td  v-if="$auth.user.role == 2"  class="operation text-right">
                             <NuxtLink
                                 :to="'/categories/' + item.id"
                                 class="btn btn-outline-primary btn-sm"
                                 >
                                 <font-awesome-icon :icon="['fas', 'edit']"  />Edit
-                            </NuxtLink> |
-                            <button type="button" class="btn btn-primary btn-sm" @click="onDelete(item.id)">
+                            </NuxtLink>
+                            <button  type="button" class="btn btn-primary btn-sm" @click="onDelete(item.id)">
                                 <font-awesome-icon :icon="['fas', 'trash-alt']"  /> 
                                 Xóa
                             </button>
@@ -86,44 +86,10 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- <div>
-                <p>Current page: {{ currentPage }}</p>
-                <v-pagination v-model="currentPage"
-                    :page-count="totalPages"
-                    :classes="bootstrapPaginationClasses"
-                    :labels="paginationAnchorTexts"
-                    :click-handler="changePage"
-                    >
-                </v-pagination>
-            </div> -->
         </div>
-        <!-- <div>
-            <div>
-                <h6>Trang</h6>
-                <b-pagination v-model="currentPage" pills :total-rows="rows" size="sm"></b-pagination>
-            </div>
-            <div>
-                Test
-               <Page :total="100" />
-            </div>
-        </div> -->
-
-        <div class="border-bottom">
-            <Pagination :records="15" v-model="page" :per-page="5" @paginate="callback" />
-        </div> 
-
-        <!-- 
-        <v-pagination
-            v-model="pagination.current"
-            :length="pagination.total"
-            @input="onPageChange"
-        ></v-pagination> -->
-
-
     </div>
 </template>
 <script>
-import Pagination from 'vue-pagination-2';
 export default {
     props: {
         listCategories: {
@@ -135,9 +101,6 @@ export default {
             type: Boolean,
             default: () => false
         }
-    },
-    components: {
-        Pagination
     },
     data() {
         return {
@@ -154,40 +117,22 @@ export default {
             rows: 100,
             currentPage: 1,
             totalPages: 30,
-            bootstrapPaginationClasses: {
-                ul: 'pagination',
-                li: 'page-item',
-                liActive: 'active',
-                liDisable: 'disabled',
-                button: 'page-link'  
-            },
-            paginationAnchorTexts: {
-                first: 'First',
-                prev: 'Previous',
-                next: 'Next',
-                last: 'Last'
-            },
-            pagination: {
-                current: 1,
-                total: 0
-            },
-            page: 1
         }
     },
-    mounted(){
-        this.list()
-    },
+    // mounted(){
+    //     this.list()
+    // },
     methods: {
-        callback: function(page) {
-            console.log(`Page ${page} was selected. Do something about it`);
-        },
-        async list(page=1){
-            await axios.get(`/api/categories?page=${page}`).then(({data})=>{
-                this.listCategories = data
-            }).catch(({ response })=>{
-                console.error(response)
-            })
-        },
+        // callback: function(page) {
+        //     console.log(`Page ${page} was selected. Do something about it`);
+        // },
+        // async list(page=1){
+        //     await axios.get(`/api/categories?page=${page}`).then(({data})=>{
+        //         this.listCategories = data
+        //     }).catch(({ response })=>{
+        //         console.error(response)
+        //     })
+        // },
 
         openModal() {
             this.myModal = true;

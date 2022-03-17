@@ -11,11 +11,17 @@
         <div class="pl-5 pr-5 pt-5 pb-0">
             <BrandSearchForm v-on:search="searchBrand" />
            <BrandTable v-bind:brands="brands" :loading="loading" />
-        </div>
-        <div>
-           <Pagination
-              :total="total"
-            />
+           <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item" v-bind:class="[{disabled: !panigation.prev_page_url}]">
+                <a @click="fetchBrands(panigation.prev_page_url)" class="page-link" href="#">Trang trước</a>
+              </li>
+              <li class="page-item disabled"><a class="page-link " >Trang {{panigation.current_page}} - {{panigation.last_page}}</a></li>
+              <li class="page-item" v-bind:class="[{disabled: !panigation.next_page_url}]">
+                <a  @click="fetchBrands(panigation.next_page_url)" class="page-link" href="#">Trang sau</a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
@@ -38,13 +44,17 @@ export default {
         total: 0,
         currentPage: 0,
         perPage: 10,
-        totalItems: 0
+        totalItems: 0,
+        panigation:{}
       };
     },
 
     mounted () {
-      this.fetch(),
       this.loading = true
+    },
+
+    created() {
+      this.fetchBrands()
     },
 
     computed: {
@@ -56,22 +66,34 @@ export default {
     },
 
     methods: {
-      async fetch(page) {
+      fetchBrands(page_url) {
+        const vm = this;
+        page_url = page_url || 'http://127.0.0.1:8000/api/brands';
         this.loading = true
-        if (typeof page === "undefined") {
-          page = 1;
+        fetch(page_url)
+        .then(res=>res.json())
+        .then(res=> {
+          this.brands = res.data;
+          vm.makePagination(res.meta, res.links);
+          this.loading = false
+        })
+      },
+
+      makePagination(meta, links) {
+        const pagination = {
+          current_page: meta.current_page,
+          last_page: meta.last_page,
+          next_page_url: links.next,
+          prev_page_url: links.prev
         }
-        const res = this.cate = await fetch("http://127.0.0.1:8000/api/brands?page=" + page + "&limit=5").then(res => res.json());
-        this.loading = false
-        this.total = res.to
-        return this.brands = res.data
+        this.panigation = pagination
       },
 
       searchBrand(keywork) {
         this.loading = true
         this.$axios.$get('http://127.0.0.1:8000/api/brands?name='+ keywork)
           .then(res => {
-            this.brands = res.data;
+            this.brands = res.data.sort((a,b)=>a.weight<b.weight?1:-1);
           })
           this.loading = false
         },

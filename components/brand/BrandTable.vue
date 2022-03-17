@@ -6,7 +6,7 @@
                 <div v-if="myModal" class="modal">
                     <transition name="model" class="modal-form">
                         <div class="modal-mask">
-                            <form class="p-3 cate-form" @submit.prevent="onSubmit">
+                            <form class="p-3 cate-form" @submit.prevent="onSubmit" >
                                 <div class="border-bottom">
                                     <h3>Thêm Danh Mục</h3>
                                 </div>
@@ -23,17 +23,31 @@
                                             class="form-control"
                                             id="inputName"
                                             placeholder="Gucci"
-                                            v-model="brand.name" 
+                                            v-model="name" 
                                         >
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="inputEmail3" class="col-sm-3 col-form-label">Trạng thái : </label>
                                     <div class="col-sm-9">
-                                        <select v-model="brand.status" class="custom-select custom-select-sm">
+                                        <select v-model="status" class="custom-select custom-select-sm">
                                             <option value="0"> Vô hiệu hóa</option>
                                             <option value="1"> Kích hoạt</option>
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Hình ảnh : </label>
+                                    <div class="col-sm-9">
+                                        <input accept="image/*"  type="file" ref="fileUpload" @change="previewFiles($event)"  class="form-control" name="image" id="image">
+                                        <img
+                                            class="brand-img"
+                                            alt=""
+                                            :src="newImage || 'https://www.namepros.com/attachments/empty-png.89209/'"
+                                        />
+                                    </div>
+                                    <div id="preview">
+                                        <img v-if="url" :src="url" />
                                     </div>
                                 </div>
                                 <div class="form-submit">
@@ -58,26 +72,28 @@
                 <thead>
                     <tr>
                         <th scope="col">STT</th>
+                        <th scope="col">Hình ảnh</th>
                         <th scope="col">Tên </th>
                         <th scope="col">Trạng thái </th>
-                        <th scope="col" class="text-right pr-5">Thao tác</th>
+                        <th  v-if="$auth.user.role == 2"  scope="col" class="text-right pr-5">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item, key) in brands" :key="key">
                         <th scope="row">{{key+1}}</th>
+                        <td class="brand-image"><img :src="'http://127.0.0.1:8000/' + item.image"></td>
                         <td>{{item.name}}</td>
                         <td v-if="item.status == 0">
                             Vô hiệu hóa
                         </td>
                         <td v-else>Kích hoạt</td>
-                        <td class="operation text-right">
+                        <td  v-if="$auth.user.role == 2"  class="operation text-right">
                             <NuxtLink
-                                :to="'/categories/' + item.id"
+                                :to="'/brand/' + item.id"
                                 class="btn btn-outline-primary btn-sm"
                                 >
                                 <font-awesome-icon :icon="['fas', 'edit']"  />Edit
-                            </NuxtLink> |
+                            </NuxtLink>
                             <button type="button" class="btn btn-primary btn-sm" @click="onDelete(item.id)">
                                 <font-awesome-icon :icon="['fas', 'trash-alt']"  /> 
                                 Xóa
@@ -86,40 +102,7 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- <div>
-                <p>Current page: {{ currentPage }}</p>
-                <v-pagination v-model="currentPage"
-                    :page-count="totalPages"
-                    :classes="bootstrapPaginationClasses"
-                    :labels="paginationAnchorTexts"
-                    :click-handler="changePage"
-                    >
-                </v-pagination>
-            </div> -->
         </div>
-        <!-- <div>
-            <div>
-                <h6>Trang</h6>
-                <b-pagination v-model="currentPage" pills :total-rows="rows" size="sm"></b-pagination>
-            </div>
-            <div>
-                Test
-               <Page :total="100" />
-            </div>
-        </div> -->
-
-        <div class="border-bottom">
-            <Pagination :records="15" v-model="page" :per-page="5" @paginate="callback" />
-        </div> 
-
-        <!-- 
-        <v-pagination
-            v-model="pagination.current"
-            :length="pagination.total"
-            @input="onPageChange"
-        ></v-pagination> -->
-
-
     </div>
 </template>
 <script>
@@ -136,48 +119,33 @@ export default {
             default: () => false
         }
     },
-    components: {
-        Pagination
-    },
     data() {
         return {
             loading: false,
             modal: false,
             // id: this.$route.params.id,
-            brand: {
-                name: '',
-                status: ''
-            },
+            name: '',
+            status: '',
             brands:[],
             myModal: false,
             error:[],
-            rows: 100,
-            currentPage: 1,
-            totalPages: 30,
-            bootstrapPaginationClasses: {
-                ul: 'pagination',
-                li: 'page-item',
-                liActive: 'active',
-                liDisable: 'disabled',
-                button: 'page-link'  
-            },
-            paginationAnchorTexts: {
-                first: 'First',
-                prev: 'Previous',
-                next: 'Next',
-                last: 'Last'
-            },
-            pagination: {
-                current: 1,
-                total: 0
-            },
-            page: 1
+            url:'',
+            newImage: ""
         }
     },
     mounted(){
         this.list()
     },
     methods: {
+        async previewFiles(event) {
+            const file = event.target.files[0];
+
+            const theReader = new FileReader();
+            theReader.onloadend = async () => {
+                this.newImage = await theReader.result;
+            };
+            theReader.readAsDataURL(file);
+        },
         callback: function(page) {
             console.log(`Page ${page} was selected. Do something about it`);
         },
@@ -193,31 +161,40 @@ export default {
             this.myModal = true;
         },
         async onDelete(id) {
-            if (confirm('Bạn có muốn xóa danh mục ? ')) {
-                await this.$axios.$delete("http://127.0.0.1:8000/api/categories/destroy/" + id)
+            if (confirm('Bạn có muốn xóa thương hiệu ? ')) {
+                await this.$axios.$delete("http://127.0.0.1:8000/api/brand/destroy/" + id)
                 location.reload();
             }
         },
         async submitData() {
             this.error = [];
 
-            if (!this.brand.name) {
+            if (!this.name) {
                 this.error.push("Thương hiệu không được để trống");
             }
 
-            if (!this.brand.status) {
+            if (!this.status) {
                 this.error.push("Trạng thái không được để trống");
             }
 
             if (!this.error.length) {
-                if (this.id) {
-                    await this.$axios.$put('http://127.0.0.1:8000/api/brands/update/' + this.id, this.brand)
-                    this.myModal = false;
-                    location.reload();
+                let formData = new FormData();
+                formData.append('name', this.name);
+                formData.append('status', this.status);
+                if(document.getElementById('image').files[0]) {
+                    formData.append('image',document.getElementById('image').files[0]);
                 }
-                await this.$axios.$post('http://127.0.0.1:8000/api/brands/store', this.brand)
-                this.myModal = false;
-                location.reload();
+
+                await this.$axios.$post('http://127.0.0.1:8000/api/brand/store', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                .then(res => {
+                    this.$refs.fileUpload.value="";
+                    location.reload();
+                    alert("Thêm thành công !")
+                })
             }
         },
 
@@ -265,6 +242,18 @@ a {
     padding: 20px;
     width: 800px;
     background-color: white;
+}
+
+.brand-img {
+    max-width: 150px;
+    height: 100px;
+    
+}
+
+.brand-image img {
+    max-width: 100px;
+    height: auto;
+    object-fit: cover;
 }
 
 </style>

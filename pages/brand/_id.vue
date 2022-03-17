@@ -12,16 +12,16 @@
         <div class="row align-items-center">
           <div class="col">
             <ol class="breadcrumb my-3">
-              <li class="breadcrumb-item active">Home</li>
-              <li class="breadcrumb-item active">User</li>
-              <li class="breadcrumb-item active">New</li>
+              <li class="breadcrumb-item active">Trang chủ</li>
+              <li class="breadcrumb-item active">Thương hiệu</li>
+              <li class="breadcrumb-item active">Chỉnh sửa</li>
             </ol>
           </div>
         </div>
         <div class="d-flex justify-content-center" >
           <div class="card col-md-12 p-0">
             <div class="card-header d-flex align-items-center">
-            <h3 class="card-title">New Category</h3>
+            <h3 class="card-title">Chỉnh sửa thương hiệu</h3>
           </div>
             <BrandCreateEdit  :brand="brand" />
           </div>
@@ -40,7 +40,7 @@ export default {
   components: {BrandCreateEdit, MenuLeft, MenuHead },
   data() {
     return {
-      category: {},
+      brand: {},
       edit:true,
       id: this.$route.params.id,
     };
@@ -49,7 +49,7 @@ export default {
    methods: {
         async findproductById() {
         this.cate = await this.$axios.$get("http://127.0.0.1:8000/api/brand/show/" + this.id)
-        return this.category = this.cate.data
+        return this.brand = this.cate.data
         }
     },
     mounted() {

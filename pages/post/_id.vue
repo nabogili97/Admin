@@ -13,7 +13,7 @@
           <div class="col">
             <ol class="breadcrumb my-3">
               <li class="breadcrumb-item active">Trang chủ</li>
-              <li class="breadcrumb-item active">Thành viên</li>
+              <li class="breadcrumb-item active">Thương hiệu</li>
               <li class="breadcrumb-item active">Chỉnh sửa</li>
             </ol>
           </div>
@@ -21,9 +21,9 @@
         <div class="d-flex justify-content-center" >
           <div class="card col-md-12 p-0">
             <div class="card-header d-flex align-items-center">
-            <h3 class="card-title">Chỉnh sửa thành viên</h3>
+            <h3 class="card-title">Chỉnh sửa thương hiệu</h3>
           </div>
-          <UserCreateEdit :user="user" />
+            <PostCreateEdit  :post="post" />
           </div>
         </div>
       </div>
@@ -35,26 +35,28 @@
 <script>
 import MenuLeft from '../../components/MenuLeft.vue'
 import MenuHead from '../../components/MenuHead.vue'
-import UserCreateEdit from '~/components/user/UserCreateEdit.vue'
+import PostCreateEdit from '../../components/post/PostCreateEdit.vue'
 export default {
-  components: { UserCreateEdit, MenuLeft, MenuHead },
-    data() {
+  components: {PostCreateEdit, MenuLeft, MenuHead },
+  data() {
     return {
-      user: {},
+      post: {},
       edit:true,
       id: this.$route.params.id,
     };
   },
 
    methods: {
-      async findUserById() {
-      this.use = await this.$axios.$get("http://127.0.0.1:8000/api/users/show/" + this.id)
-      return this.user = this.use.data
-      }
-   },
+        async findproductById() {
+        this.cate = await this.$axios.$get("http://127.0.0.1:8000/api/post/show/" + this.id)
+        return this.post = this.cate.data
+        }
+    },
     mounted() {
-        this.findUserById()
+        this.findproductById()
     }
+
+
 }
 </script>
 

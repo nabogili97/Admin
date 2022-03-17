@@ -30,7 +30,7 @@
                     >
                 </div>
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-3 col-form-label">Mật khẩu : </label>
                 <div class="col-sm-9">
                     <input
@@ -41,14 +41,13 @@
                         v-model="user.password"
                     />
                 </div>
-            </div>
+            </div> -->
             <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-3 col-form-label">Điện thoại : </label>
                 <div class="col-sm-9">
                     <input
                         type="text"
                         class="form-control"
-                        id="inputName"
                         placeholder="0326966656"
                         v-model="user.phone"
                     >
@@ -96,7 +95,7 @@
             <div class="form-submit">
                 <div class="form-group text-center p-3">
                     <button class="btn btn-success" @click.prevent="submitData">Submit</button>
-                    <button class="btn btn-primary">Clear</button>
+                     <button class="btn btn-primary"  @click.prevent="cancel">Hủy</button>
                 </div>
             </div>
         </form>
@@ -115,8 +114,6 @@ export default {
     methods: {
         async submitData() {
             this.error = [];
-            // this.user.role = Number(this.user.role)
-            // this.user.sex = Number(this.user.sex)
 
             if (!this.user.name) {
                 this.error.push("Tên không được để trống");
@@ -124,10 +121,6 @@ export default {
 
             if (!this.user.email) {
                 this.error.push("Email không được để trống");
-            }
-
-            if (!this.user.password) {
-                this.error.push("Mật khẩu không được để trống");
             }
 
             if (!this.user.phone) {
@@ -138,21 +131,14 @@ export default {
                 this.error.push("Địa chỉ không được để trống");
             }
 
-            if (!this.user.role) {
-                this.error.push("Vai trò không được để trống");
-            }
-
             if (!this.user.sex) {
                 this.error.push("Giới tính không được để trống");
-            }
-
-            if (!this.user.status) {
-                this.error.push("Trạng thái không được để trống");
             }
 
             if (!this.error.length) {
                 if (this.id) {
                     await this.$axios.$put('http://127.0.0.1:8000/api/users/update/' + this.id, this.user)
+                    alert("Cập nhật thành công")
                     return this.$router.push('/user')
                 }
             }  

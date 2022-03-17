@@ -1,37 +1,5 @@
 <template>
     <div>
-        <!-- <div class="card mb-5 form-search">
-            <div class="form-title pb-3 card-header">
-                <b>TÌM KIẾM THÔNG TIN</b>
-            </div>  
-            <div class="card-body">
-                <form>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label for="inputEmail4">Tên</label>
-                            <input type="email" class="form-control" >
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="inputEmail4">Email</label>
-                            <input type="email" class="form-control" >
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="inputEmail4">Điện thoại</label>
-                            <input type="email" class="form-control" >
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="inputEmail4">Địa chỉ</label>
-                            <input type="email" class="form-control"  >
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="inputEmail4">Chức vụ</label>
-                            <input type="email" class="form-control"  >
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                </form>
-            </div>
-        </div> -->
         <div class="product-create d-flex justify-content-end mb-3">
             <div class="">
                 <input type="button" @click="openModal" class="btn btn-primary btn-sm" value="+ Thêm mới">
@@ -101,7 +69,6 @@
                                 <input
                                     type="text"
                                     class="form-control"
-                                    id="inputName"
                                     placeholder="Hà Nội"
                                     v-model="user.address"
                                 >
@@ -162,7 +129,7 @@
                         <th scope="col">Giới tính </th>
                         <th scope="col">Chức vụ </th>
                         <th scope="col">Địa chỉ </th>
-                        <th scope="col" class="text-right pr-5">Thao tác</th>
+                        <th  v-if="$auth.user.role == 2"  scope="col" class="text-right pr-5">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -176,12 +143,12 @@
                         <td v-if="item.role == 0"> Quản trị viên </td>
                         <td v-else>Thành viên</td>
                         <td>{{item.address}}</td>
-                        <td class="operation text-right">
+                        <td  v-if="$auth.user.role == 2"  class="operation text-right">
                             <NuxtLink
                                 :to="'/user/' + item.id"
                                 class="btn btn-outline-primary btn-sm"
                                 ><font-awesome-icon :icon="['fas', 'edit']"  />Edit
-                            </NuxtLink> |
+                            </NuxtLink>
                             <button type="button" class="btn btn-primary btn-sm" @click="onDelete(item.id)">
                                 <font-awesome-icon :icon="['fas', 'trash-alt']"  /> 
                                 Xóa
@@ -191,13 +158,9 @@
                 </tbody>
                 </table>
         </div>
-        <div class="border-bottom">
-            <Pagination :records="15" v-model="page" :per-page="5" @paginate="callback" />
-        </div> 
     </div>
 </template>
 <script>
-import Pagination from 'vue-pagination-2';
 export default {
     props: {
         users: {
@@ -209,9 +172,6 @@ export default {
             type: Boolean,
             default: () => false
         }
-    },
-    components: {
-        Pagination
     },
     data() {
         return {
@@ -232,24 +192,6 @@ export default {
             rows: 100,
             currentPage: 1,
             totalPages: 30,
-            bootstrapPaginationClasses: {
-                ul: 'pagination',
-                li: 'page-item',
-                liActive: 'active',
-                liDisable: 'disabled',
-                button: 'page-link'  
-            },
-            paginationAnchorTexts: {
-                first: 'First',
-                prev: 'Previous',
-                next: 'Next',
-                last: 'Last'
-            },
-            pagination: {
-                current: 1,
-                total: 0
-            },
-            page: 1
         }
     },
     methods: {
@@ -302,10 +244,14 @@ export default {
                     this.userModal = false;
                     location.reload();
                 }
-                await this.$axios.$post('http://127.0.0.1:8000/api/users/store', this.user)
+                await this.$axios.$post('http://127.0.0.1:8000/api/auth/register', this.user)
                 this.userModal = false;
                 location.reload();
             }
+        },
+
+        UploadFile(upPhoto) {
+            console.log(upPhoto);
         },
         
         openModal() {
