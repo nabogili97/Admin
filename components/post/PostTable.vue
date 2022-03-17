@@ -53,6 +53,40 @@
                                                 >
                                             </div>
                                         </div>
+                                        
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group row pt-3">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Nội dung ngắn : </label>
+                                            <div class="col-sm-9">
+                                                <textarea 
+                                                    type="text"
+                                                    class="form-control description"
+                                                    placeholder="Thiết kế lạ mắt ..."
+                                                    v-model="description"
+                                                />
+                                            </div>
+                                        </div>
+                                        <!-- <div class="form-group row pt-3">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Chi tiết : </label>
+                                            <div class="col-sm-9">
+                                                <textarea 
+                                                    type="text"
+                                                    class="form-control description"
+                                                    placeholder="Thiết kế lạ mắt ..."
+                                                    v-model="description"
+                                                />
+                                            </div>
+                                        </div> -->
+                                        <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Trạng thái : </label>
+                                            <div class="col-sm-9">
+                                                <select v-model="status" class="custom-select custom-select-sm">
+                                                    <option value="0"> Vô hiệu hóa</option>
+                                                    <option value="1"> Kích hoạt</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Hình ảnh : </label>
                                             <div class="col-sm-9">
@@ -68,41 +102,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group row pt-3">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Nội dung ngắn : </label>
-                                            <div class="col-sm-9">
-                                                <textarea 
-                                                    type="text"
-                                                    class="form-control description"
-                                                    placeholder="Thiết kế lạ mắt ..."
-                                                    v-model="content"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row pt-3">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Chi tiết : </label>
-                                            <div class="col-sm-9">
-                                                <textarea 
-                                                    type="text"
-                                                    class="form-control description"
-                                                    placeholder="Thiết kế lạ mắt ..."
-                                                    v-model="description"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Trạng thái : </label>
-                                            <div class="col-sm-9">
-                                                <select v-model="status" class="custom-select custom-select-sm">
-                                                    <option value="0"> Vô hiệu hóa</option>
-                                                    <option value="1"> Kích hoạt</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
                                 </div>
+                                <div class="form-group row pt-3 ckediter-content">
+                                            <label for="inputEmail3" class="col-sm-1 col-form-label">Chi tiết : </label>
+                                            <div class="col-sm-11 content-scroll">
+                                                <client-only placeholder="loading...">
+                                                    <ckeditor-nuxt v-model="content" :config="editorConfig"  />
+                                                </client-only>
+                                            </div>
+                                        </div> 
                                 <div class="form-submit">
                                     <div class="form-group text-center p-3">
                                         <button class="btn btn-success" @click.prevent="submitData">Lưu</button>
@@ -176,6 +184,9 @@ export default {
             default: () => false
         }
     },
+    components: {
+        'ckeditor-nuxt': () => { if (process.client) { return import('@blowstack/ckeditor-nuxt') } },
+    },
     data() {
         return {
             loading: false,
@@ -191,7 +202,17 @@ export default {
             myModal: false,
             error:[],
             url:'',
-            newImage: ""
+            newImage: "",
+            editorConfig: {
+                simpleUpload: {
+                    uploadUrl: 'path_to_image_controller',
+                    headers: {
+                        'Authorization': 'optional_token'
+                        }
+                },
+
+                width: 'auto',
+            },
         }
     },
     mounted(){
@@ -223,7 +244,7 @@ export default {
         },
         async onDelete(id) {
             if (confirm('Bạn có muốn xóa thương hiệu ? ')) {
-                await this.$axios.$delete("http://127.0.0.1:8000/api/brand/destroy/" + id)
+                await this.$axios.$delete("http://127.0.0.1:8000/api/post/destroy/" + id)
                 location.reload();
             }
         },
@@ -316,12 +337,15 @@ a {
     overflow-x: auto;
     display: flex;
     flex-direction: column;
+    
 } 
+
 
 .cate-form {
     border-radius: 5px;
     padding: 20px;
     width: 1200px;
+    height: auto;
     background-color: white;
 }
 
@@ -337,4 +361,8 @@ a {
     object-fit: cover;
 }
 
+.ck-editor__editable {
+    min-height: 100px;
+    max-height: 100px;
+}
 </style>

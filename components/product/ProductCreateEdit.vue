@@ -13,13 +13,11 @@
                         <img v-if="url" :src="url" />
                     </div>
                     <img
-                            class="brand-img"
-                            alt=""
-                            :src="newImage || 'http://127.0.0.1:8000/' + product.image"
+                        class="brand-img"
+                        alt=""
+                        :src="newImage || 'http://127.0.0.1:8000/' + product.image"
                     />
                     <input accept="image/*"  type="file" ref="fileUpload" @change="previewFiles($event)"  class="form-control" name="image" id="image">
-                        
-                    
                 </div>
             </div>
             <div class="form-group row">
@@ -100,23 +98,20 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Nội dung : </label>
-                <div class="col-sm-10 col-9" >
-                    <textarea 
-                        type="text"
-                        class="form-control"
-                        placeholder="Giày sneaker"
-                        v-model="product.content"
-                     />
-                </div>
-            </div>
-            <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Trạng thái : </label>
                 <div class="col-sm-10 col-9">
                     <select v-model="product.status" class="custom-select custom-select-sm">
                         <option value="0"> Vô hiệu hóa</option>
                         <option value="1"> Kích hoạt</option>
                     </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Nội dung : </label>
+                <div class="col-sm-10 col-9" >
+                    <client-only placeholder="loading...">
+                        <ckeditor-nuxt v-model="product.content" :config="editorConfig"  />
+                    </client-only>
                 </div>
             </div>
             <div class="form-submit">
@@ -135,13 +130,23 @@
 // Vue.use(VueFileAgent)
 export default {
     props:["product", "edit"],
-
+    components: {
+        'ckeditor-nuxt': () => { if (process.client) { return import('@blowstack/ckeditor-nuxt') } },
+    },
     data() {
         return {
             error: [],
             proId: this.$route.params.edit,
             id: this.$route.params.id,
-            newImage: ""
+            newImage: "",
+            editorConfig: {
+                simpleUpload: {
+                    uploadUrl: 'path_to_image_controller',
+                    headers: {
+                        'Authorization': 'optional_token'
+                        }
+                    }
+                },
         }
     },
     methods: {

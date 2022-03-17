@@ -7,8 +7,8 @@
                 </ul>
             </p>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Tiêu đề : </label>
-                <div class="col-sm-9" >
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Tiêu đề : </label>
+                <div class="col-sm-10" >
                     <input 
                         type="text"
                         class="form-control"
@@ -18,8 +18,8 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Ngày hiển thị : </label>
-                <div class="col-sm-9" >
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Ngày hiển thị : </label>
+                <div class="col-sm-10" >
                     <input 
                         type="date"
                         class="form-control"
@@ -29,8 +29,8 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Ngày kết thúc : </label>
-                <div class="col-sm-9" >
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Ngày kết thúc : </label>
+                <div class="col-sm-10" >
                     <input 
                         type="date"
                         class="form-control"
@@ -40,19 +40,8 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Nội dung ngắn : </label>
-                <div class="col-sm-9" >
-                    <textarea 
-                        type="text"
-                        class="form-control description"
-                        placeholder="Thiết kế lạ mắt ..."
-                        v-model="post.content"
-                    />
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Nội dung chi tiết : </label>
-                <div class="col-sm-9" >
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Nội dung ngắn : </label>
+                <div class="col-sm-10" >
                     <textarea 
                         type="text"
                         class="form-control description"
@@ -62,8 +51,8 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Trạng thái : </label>
-                <div class="col-sm-9">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Trạng thái : </label>
+                <div class="col-sm-10">
                     <select v-model="post.status" class="custom-select custom-select-sm">
                         <option value="0"> Vô hiệu hóa</option>
                         <option value="1"> Kích hoạt</option>
@@ -71,8 +60,8 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Hình ảnh : </label>
-                <div class="col-sm-9 file-img">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Hình ảnh : </label>
+                <div class="col-sm-10 file-img">
                      <input accept="image/*"  type="file" ref="fileUpload" @change="previewFiles($event)"  class="form-control" name="image" id="image">
                         <img
                             class="brand-img"
@@ -82,6 +71,14 @@
                     <div id="preview" class="file-img">
                         <img v-if="url" :src="url" />
                     </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Chi tiết bài biết : </label>
+                <div class="col-sm-10">
+                    <client-only placeholder="loading...">
+                        <ckeditor-nuxt v-model="post.content" :config="editorConfig"  />
+                    </client-only>
                 </div>
             </div>
             <div class="form-submit">
@@ -96,6 +93,9 @@
 <script>
 export default {
     props:["post", "edit"],
+    components: {
+        'ckeditor-nuxt': () => { if (process.client) { return import('@blowstack/ckeditor-nuxt') } },
+    },
     data() {
         return {
             error: [],
@@ -109,7 +109,15 @@ export default {
                 public_start_at:'',
                 public_end_at:'',
                 description:'',
-                status:''
+                status:'',
+                editorConfig: {
+                simpleUpload: {
+                    uploadUrl: 'http://127.0.0.1:8000/post/images/',
+                    headers: {
+                        'Authorization': 'optional_token'
+                        }
+                    }
+                },
             }
         }
     },
