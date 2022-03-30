@@ -18,17 +18,6 @@
                                 <div class="row">
                                     <div class="col-md-6 col-12 border-right">
                                         <div class="form-group row">
-                                            <label  class="col-sm-3 col-3 col-form-label">Ảnh : </label>
-                                            <div class="col-sm-9 col-9 product-img" >
-                                                <input accept="image/*" type="file" @change="previewFiles($event)" class="form-control" v-on:change="onChange">
-                                                <img
-                                                    class="brand-img"
-                                                    alt=""
-                                                    :src="newImage || 'https://www.namepros.com/attachments/empty-png.89209/'"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
                                             <label class="col-sm-3 col-3 col-form-label">Tên : </label>
                                             <div class="col-sm-9 col-9"  >
                                                 <input 
@@ -78,51 +67,61 @@
                                                 >
                                             </div>
                                         </div>
+                                    <div class="form-group row">
+                                        <label  class="col-sm-3 col-3 col-form-label">Trạng thái : </label>
+                                        <div class="col-sm-9 col-9">
+                                            <select v-model="status" class="custom-select custom-select-sm">
+                                                <option value="0"> Vô hiệu hóa</option>
+                                                <option value="1"> Kích hoạt</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label  class="col-sm-3 col-3 col-form-label">Ảnh : </label>
+                                        <div class="col-sm-9 col-9 product-img" >
+                                            <input accept="image/*" type="file" @change="previewFiles($event)" class="form-control" v-on:change="onChange">
+                                            <img
+                                                class="brand-img"
+                                                alt=""
+                                                :src="newImage || 'https://www.namepros.com/attachments/empty-png.89209/'"
+                                            />
+                                        </div>
+                                    </div>
                                     </div>
                                 <div class="col-md-6 col-12">
-                                <div class="form-group row">
-                                    <label  class="col-sm-3 col-3 col-form-label">Số lượng : </label>
-                                    <div class="col-sm-9 col-9" >
-                                        <input 
-                                            type="number"
-                                            class="form-control"
-                                            placeholder="100"
-                                            v-model="qty"
-                                        >
+                                    <div class="form-group row">
+                                        <div class="col-sm-12 col-12" >
+                                            <label  class=" col-form-label ">Giảm giá : </label>
+                                            <input 
+                                                max="100"
+                                                min="0"
+                                                type="number"
+                                                class="form-control"
+                                                placeholder="10%"
+                                                v-model="discount"
+                                            />
+                                        </div>
                                     </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-12 col-12" >
+                                            <label  class=" col-form-label ">Mô tả : </label>
+                                            <textarea 
+                                                type="text"
+                                                class="form-control description"
+                                                placeholder="Thiết kế lạ mắt ..."
+                                                v-model="description"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-12 content-scroll">
+                                            <label for="inputEmail3" class="col-form-label">Giới thiệu sản phẩm : </label>
+                                            <client-only placeholder="loading...">
+                                                <ckeditor-nuxt v-model="content" :config="editorConfig"  />
+                                            </client-only>
+                                        </div>
+                                    </div> 
                                 </div>
-                                <div class="form-group row">
-                                    <label  class="col-sm-3 col-3 col-form-label ">Mô tả : </label>
-                                    <div class="col-sm-9 col-9" >
-                                        <textarea 
-                                            type="text"
-                                            class="form-control description"
-                                            placeholder="Thiết kế lạ mắt ..."
-                                            v-model="description"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label  class="col-sm-3 col-3 col-form-label">Nội dung : </label>
-                                    <div class="col-sm-9 col-9" >
-                                        <textarea 
-                                            type="text"
-                                            class="form-control description"
-                                            placeholder="Content...."
-                                            v-model="content"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label  class="col-sm-3 col-3 col-form-label">Trạng thái : </label>
-                                    <div class="col-sm-9 col-9">
-                                        <select v-model="status" class="custom-select custom-select-sm">
-                                            <option value="0"> Vô hiệu hóa</option>
-                                            <option value="1"> Kích hoạt</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                    </div>
                                 </div>
                                 <div class="form-submit">
                                     <div class="form-group text-center p-3">
@@ -148,8 +147,9 @@
                         <th scope="col">STT</th>
                         <th scope="col">Ảnh </th>
                         <th scope="col">Tên</th>
-                        <th scope="col">Giá</th>
-                        <th scope="col">Số lượng</th>
+                        <th scope="col">Giá nhập</th>
+                        <th scope="col">Giá bán</th>
+                        <th scope="col">Giảm giá</th>
                         <th scope="col">Trạng thái </th>
                         <th  v-if="$auth.user.role == 2"  scope="col" class="text-right pr-5">Thao tác</th>
                     </tr>
@@ -159,8 +159,9 @@
                         <th scope="row">{{key+1}}</th>
                         <td class="product-image"><img :src="'http://127.0.0.1:8000/' + item.image"></td>
                         <td>{{item.name}}</td>
+                        <td>{{formatPrice(item.price)}} VNĐ </td>
                         <td>{{formatPrice(item.retail_price)}} VNĐ </td>
-                        <td>{{item.qty}}</td>
+                        <td class="text-right">{{item.discount}}%</td>
                         <td v-if="item.status == 0">
                             Vô hiệu hóa
                         </td>
@@ -197,6 +198,9 @@ export default {
             default: () => false
         }
     },
+    components: {
+        'ckeditor-nuxt': () => { if (process.client) { return import('@blowstack/ckeditor-nuxt') } },
+    },
     data() {
         return {
             selectFile: null,
@@ -207,13 +211,13 @@ export default {
             file: '',
             success: '',
             path:'',
+            discount:'',
             image:'',
             category_id: '',
             brand_id:'',
             price:'',
             retail_price:'',
             description:'',
-            qty:'',
             content:'',
             status:'',
             error:'',
@@ -222,7 +226,15 @@ export default {
             error:[],
             cateList:[],
             brandList:[],
-            newImage: ""
+            newImage: "",
+            editorConfig: {
+                simpleUpload: {
+                    uploadUrl: 'http://127.0.0.1:8000/post/images/',
+                    headers: {
+                        'Authorization': 'optional_token'
+                        }
+                    }
+            },
         }
     },
 
@@ -278,6 +290,7 @@ export default {
         async onDelete(id) {
             if (confirm('Bạn có muốn xóa sản phẩm ? ')) {
                 await this.$axios.$delete("http://127.0.0.1:8000/api/product/destroy/" + id)
+                this.$swal("Thành công", "Xóa sản phẩm thành công", "success")
                 location.reload();
             }
         },
@@ -307,8 +320,8 @@ export default {
                 this.error.push("Giá bán không được để trống");
             }
 
-            if (!this.qty) {
-                this.error.push("Số lượng không được để trống");
+            if (!this.discount) {
+                this.error.push("Giảm giá không được để trống");
             }
 
             if (!this.description) {
@@ -341,7 +354,7 @@ export default {
                 data.append('retail_price', this.retail_price);
                 data.append('description', this.description);
                 data.append('content', this.content);
-                data.append('qty', this.qty);
+                data.append('discount', this.discount);
                 data.append('status', this.status);
                 this.$axios.$post('http://127.0.0.1:8000/api/upload/', data, config)
                 .then(function (res) {
@@ -352,7 +365,7 @@ export default {
                 });
             }
             this.myModal = false;
-            alert("Thêm sản phẩm thành công !")
+            this.$swal("Thành công", "Thêm sản phẩm thành công", "success")
             window.location.href = "/product";
             
         },
@@ -366,9 +379,9 @@ export default {
         },
 
         formatPrice(value) {
-        const val = (value/1).toFixed(0).replace('.', ',')
-        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-    }
+            const val = (value/1).toFixed(0).replace('.', ',')
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        }
     },
 }
 </script>
@@ -436,7 +449,7 @@ a {
 }
 
 .description {
-    height: 121px;
+    height: 70px;
 }
 
 .brand-img {
@@ -448,6 +461,11 @@ a {
 
 .bgred {
     background-image: linear-gradient(#ffecd2, #fcb69f);
+}
+
+.content-scroll {
+    overflow: scroll;
+    height: 300px;
 }
 
 </style>

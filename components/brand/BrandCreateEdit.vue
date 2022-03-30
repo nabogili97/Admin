@@ -7,8 +7,8 @@
                 </ul>
             </p>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Tên : </label>
-                <div class="col-sm-9" >
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Tên : </label>
+                <div class="col-sm-10" >
                     <input 
                         type="text"
                         class="form-control"
@@ -18,8 +18,8 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Trạng thái : </label>
-                <div class="col-sm-9">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Trạng thái : </label>
+                <div class="col-sm-10">
                     <select v-model="brand.status" class="custom-select custom-select-sm">
                         <option value="0"> Vô hiệu hóa</option>
                         <option value="1"> Kích hoạt</option>
@@ -27,8 +27,8 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-3 col-form-label">Hình ảnh : </label>
-                <div class="col-sm-9 file-img">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Hình ảnh : </label>
+                <div class="col-sm-10 file-img">
                      <input accept="image/*"  type="file" ref="fileUpload" @change="previewFiles($event)"  class="form-control" name="image" id="image">
                         <img
                             class="brand-img"

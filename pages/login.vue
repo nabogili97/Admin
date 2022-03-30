@@ -8,6 +8,11 @@
                 <div class="register-right col-md-7 ">
                     <form   class="pl-4 pr-2 border-left">
                         <h5 class="mb-5">ĐĂNG NHẬP</h5>
+                        <p v-if="error.length > 0">
+                            <ul>
+                                <li class="text-danger" v-for="(aleft, index) in error" :key="index">{{ aleft }}</li>
+                            </ul>
+                        </p>
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Email</label>
                             <input v-model="userForm.email" type="email" class="form-control">
@@ -36,17 +41,35 @@ export default {
                 password: ''
             },
             user : [],
-            isLogin : ''
+            isLogin : '',
+            error: [],
             
         }
     },
 
     methods: {
         async loginUser() {
-        // đoạn code này sẽ tự động gọi đến endpoint login mà chúng ta đã define trong phần nuxt.config.js
-        await this.$auth.login({
-            data: this.userForm
-        }).then(() => this.$router.push('/')); // muốn dùng được đoạn này thì cài thêm vue-router nhé
+
+            this.error = [];
+
+            if (!this.userForm.email) {
+                this.error.push("Email không được để trống");
+            }
+
+            if (!this.userForm.password) {
+                this.error.push("Mật khẩu không được để trống");
+            }
+
+            if (!this.error.length) {
+                await this.$auth.login({
+                    data: this.userForm
+                })
+                .then(() => this.$router.push('/'))
+                .catch(function(erro) {
+                    alert('Tài khoản sai hoặc không tồn tại !!!')
+                }); 
+            }
+        
     }
 
 

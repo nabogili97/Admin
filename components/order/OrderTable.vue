@@ -102,6 +102,7 @@
                 </tbody>
                 </table>
         </div>
+        
     </div>
 </template>
 <script>
@@ -135,6 +136,7 @@ export default {
         async onDelete(id) {
             if (confirm('Bạn có muốn xóa đơn hàng ? ')) {
                 await this.$axios.$delete("http://127.0.0.1:8000/api/payment/destroy/" + id)
+                this.$swal("Thành công", "Xóa đơn hàng thành công", "success")
                 location.reload();
             }
         },

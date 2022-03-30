@@ -2,6 +2,7 @@ import { Line } from 'vue-chartjs'
 
 export default {
     extends: Line,
+    props: ['data','listDay'],
     data() {
         return {
             gradient: null,
@@ -27,37 +28,29 @@ export default {
 
         this.renderChart(
             {
-                labels: [
-                    "January",
-                    "February",
-                    "March",
-                    "April",
-                    "May",
-                    "June",
-                    "July"
-                ],
+                labels: this.listDay,
                 datasets: [
+                    // {
+                    //     label: "Doanh thu ( VNĐ )",
+                    //     borderColor: "#FC2525",
+                    //     pointBackgroundColor: "white",
+                    //     borderWidth: 1,
+                    //     pointBorderColor: "white",
+                    //     backgroundColor: this.gradient,
+                    //     data: this.data
+                    // },
                     {
-                        label: "Data One",
-                        borderColor: "#FC2525",
-                        pointBackgroundColor: "white",
-                        borderWidth: 1,
-                        pointBorderColor: "white",
-                        backgroundColor: this.gradient,
-                        data: [40, 39, 10, 40, 39, 80, 40]
-                    },
-                    {
-                        label: "Data Two",
+                        label: "Doanh thu ngày trên tháng ( VNĐ )",
                         borderColor: "#05CBE1",
                         pointBackgroundColor: "white",
                         pointBorderColor: "white",
                         borderWidth: 1,
                         backgroundColor: this.gradient2,
-                        data: [60, 55, 32, 10, 2, 12, 53]
+                        data: this.data
                     }
                 ]
             },
             { responsive: true, maintainAspectRatio: false }
         );
-    }
+    },
 }

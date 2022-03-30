@@ -10,9 +10,7 @@
         </div>
         <div class="pl-5 pr-5 pt-5 pb-0">
           <Dasboard />
-        </div>
-        <div class="pl-5 mt-5">
-          <random-chart />
+          <DasboardRandomChart class="mt-5" />
         </div>
       </div>
     </div>
@@ -23,13 +21,12 @@
 import Dasboard from '../components/dasboard/Dasboard.vue'
 import MenuHead from '../components/MenuHead.vue'
 import MenuLeft from '../components/MenuLeft.vue'
-import RandomChart from '../components/dasboard/RandomChart.vue'
+import DasboardRandomChart from '../components/dasboard/RandomChart.vue'
 export default {
-  components: {MenuLeft, MenuHead, Dasboard, RandomChart},
-  name: 'IndexPage'
-
-    
+  components: {MenuLeft, MenuHead, Dasboard,DasboardRandomChart},
+  name: 'IndexPage',
 }
+
 </script>
 <style scoped>
 .dasboard {

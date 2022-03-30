@@ -245,6 +245,7 @@ export default {
         async onDelete(id) {
             if (confirm('Bạn có muốn xóa thương hiệu ? ')) {
                 await this.$axios.$delete("http://127.0.0.1:8000/api/post/destroy/" + id)
+                this.$swal("Thành công", "Xóa bài viết thành công", "success")
                 location.reload();
             }
         },
@@ -294,8 +295,8 @@ export default {
                 })
                 .then(res => {
                     this.$refs.fileUpload.value="";
+                    this.$swal("Thành công", "Thêm bài viết thành công", "success")
                     location.reload();
-                    alert("Thêm thành công !")
                 })
             }
         },
@@ -364,5 +365,11 @@ a {
 .ck-editor__editable {
     min-height: 100px;
     max-height: 100px;
+}
+
+
+.content-scroll {
+    overflow: scroll;
+    height: 350px;
 }
 </style>

@@ -13,7 +13,7 @@
           <div class="col">
             <ol class="breadcrumb my-3">
               <li class="breadcrumb-item active">Trang chủ</li>
-              <li class="breadcrumb-item active">Sản phẩm</li>
+              <li class="breadcrumb-item active">QL Sản phẩm</li>
               <li class="breadcrumb-item active">Chỉnh sửa</li>
             </ol>
           </div>
@@ -49,7 +49,7 @@ export default {
 
    methods: {
         async findproductById() {
-          this.pro = await this.$axios.$get("http://127.0.0.1:8000/api/product/show/" + this.id)
+          this.pro = await this.$axios.$get("http://127.0.0.1:8000/api/productShow/" + this.id)
           return this.product = this.pro.data
         }
     },

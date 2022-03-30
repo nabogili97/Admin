@@ -8,7 +8,7 @@
                         <div class="modal-mask">
                             <form class="p-3 cate-form" @submit.prevent="onSubmit" >
                                 <div class="border-bottom">
-                                    <h3>Thêm Danh Mục</h3>
+                                    <h3>Thêm Thương Hiệu</h3>
                                 </div>
                                 <p v-if="error.length > 0">
                                     <ul>
@@ -163,6 +163,7 @@ export default {
         async onDelete(id) {
             if (confirm('Bạn có muốn xóa thương hiệu ? ')) {
                 await this.$axios.$delete("http://127.0.0.1:8000/api/brand/destroy/" + id)
+                this.$swal("Thành công", "Xóa thương hiệu thành công", "success")
                 location.reload();
             }
         },
@@ -192,8 +193,8 @@ export default {
                 })
                 .then(res => {
                     this.$refs.fileUpload.value="";
+                    this.$swal("Thành công", "Thêm thương hiệu thành công", "success")
                     location.reload();
-                    alert("Thêm thành công !")
                 })
             }
         },

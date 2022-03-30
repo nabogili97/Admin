@@ -13,7 +13,7 @@
           <div class="col">
             <ol class="breadcrumb my-3">
               <li class="breadcrumb-item active">Trang chủ</li>
-              <li class="breadcrumb-item active">Thương hiệu</li>
+              <li class="breadcrumb-item active">AL Bài viết</li>
               <li class="breadcrumb-item active">Chỉnh sửa</li>
             </ol>
           </div>
@@ -21,7 +21,7 @@
         <div class="d-flex justify-content-center" >
           <div class="card col-md-12 p-0">
             <div class="card-header d-flex align-items-center">
-            <h3 class="card-title">Chỉnh sửa thương hiệu</h3>
+            <h3 class="card-title">Chỉnh sửa bài viết</h3>
           </div>
             <PostCreateEdit  :post="post" />
           </div>
@@ -55,8 +55,6 @@ export default {
     mounted() {
         this.findproductById()
     }
-
-
 }
 </script>
 

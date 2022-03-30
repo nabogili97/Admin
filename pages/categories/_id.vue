@@ -13,7 +13,7 @@
           <div class="col">
             <ol class="breadcrumb my-3">
               <li class="breadcrumb-item active">Trang chủ</li>
-              <li class="breadcrumb-item active">Danh mục</li>
+              <li class="breadcrumb-item active">QL Danh mục</li>
               <li class="breadcrumb-item active">Chỉnh sửa</li>
             </ol>
           </div>

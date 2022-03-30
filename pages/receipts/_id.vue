@@ -13,7 +13,7 @@
           <div class="col">
             <ol class="breadcrumb my-3">
               <li class="breadcrumb-item active">Trang chủ</li>
-              <li class="breadcrumb-item active">QL Đơn hàng</li>
+              <li class="breadcrumb-item active">Thương hiệu</li>
               <li class="breadcrumb-item active">Chỉnh sửa</li>
             </ol>
           </div>
@@ -21,27 +21,26 @@
         <div class="d-flex justify-content-center" >
           <div class="card col-md-12 p-0">
             <div class="card-header d-flex align-items-center">
-            <h3 class="card-title">Chỉnh sửa đơn hàng</h3>
+            <h3 class="card-title">Chỉnh sửa thương hiệu</h3>
           </div>
-            <order-create-form :order="order" />
+            <ReceiptsCreateEdit  :receipt="receipt" />
           </div>
         </div>
       </div>
       </div>
     </div>
   </div>
-  
 </template>
 
 <script>
 import MenuLeft from '../../components/MenuLeft.vue'
 import MenuHead from '../../components/MenuHead.vue'
-import OrderCreateForm from '../../components/order/OrderCreateForm.vue'
+import ReceiptsCreateEdit from '../../components/receipts/ReceiptsCreateEdit.vue'
 export default {
-  components: { MenuLeft, MenuHead, OrderCreateForm },
+  components: {ReceiptsCreateEdit, MenuLeft, MenuHead },
   data() {
     return {
-      order: {},
+      brand: {},
       edit:true,
       id: this.$route.params.id,
     };
@@ -49,8 +48,8 @@ export default {
 
    methods: {
         async findproductById() {
-        this.cate = await this.$axios.$get("http://127.0.0.1:8000/api/payment/show/" + this.id)
-        return this.order = this.cate.data
+        this.recei = await this.$axios.$get("http://127.0.0.1:8000/api/braproductDetailnd/show/" + this.id)
+        return this.receipt = this.recei.data
         }
     },
     mounted() {

@@ -140,6 +140,7 @@ export default {
         async onDelete(id) {
             if (confirm('Bạn có muốn xóa danh mục ? ')) {
                 await this.$axios.$delete("http://127.0.0.1:8000/api/categories/destroy/" + id)
+                this.$swal("Thành công", "Xóa danh mục thành công", "success")
                 location.reload();
             }
         },
@@ -162,6 +163,7 @@ export default {
                 }
                 await this.$axios.$post('http://127.0.0.1:8000/api/categories/store', this.category)
                 this.myModal = false;
+                this.$swal("Thành công", "Thêm danh mục thành công", "success")
                 location.reload();
             }
         },

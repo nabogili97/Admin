@@ -123,6 +123,7 @@ export default {
             if (!this.error.length) {
                 if (this.id) {
                     await this.$axios.$put('http://127.0.0.1:8000/api/payment/update/' + this.id, this.order)
+                    this.$swal("Thành công", "Cập nhật đơn hàng thành công", "success")
                     return this.$router.push('/order')
                 }
             }  

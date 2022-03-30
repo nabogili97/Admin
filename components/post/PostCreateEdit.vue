@@ -75,7 +75,7 @@
             </div>
             <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-2 col-form-label">Chi tiết bài biết : </label>
-                <div class="col-sm-10">
+                <div class="col-sm-10 content-scroll">
                     <client-only placeholder="loading...">
                         <ckeditor-nuxt v-model="post.content" :config="editorConfig"  />
                     </client-only>
@@ -110,15 +110,16 @@ export default {
                 public_end_at:'',
                 description:'',
                 status:'',
-                editorConfig: {
+                
+            },
+            editorConfig: {
                 simpleUpload: {
                     uploadUrl: 'http://127.0.0.1:8000/post/images/',
                     headers: {
                         'Authorization': 'optional_token'
                         }
                     }
-                },
-            }
+            },
         }
     },
     methods: {
@@ -208,5 +209,10 @@ export default {
     max-height: 200px;
     height: auto;
     object-fit: cover;
+}
+
+.content-scroll {
+    overflow: scroll;
+    height: 350px;
 }
 </style>

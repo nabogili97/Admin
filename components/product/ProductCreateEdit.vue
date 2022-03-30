@@ -63,6 +63,20 @@
                     >
                 </div>
             </div>
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Giảm giá : </label>
+                <div class="col-sm-10 col-9" >
+                    <input 
+
+                        type="number"
+                        max="100"
+                        min="0"
+                        class="form-control"
+                        placeholder="Giày sneaker"
+                        v-model="product.discount"
+                    >
+                </div>
+            </div>
 
             <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Giá bán : </label>
@@ -108,7 +122,7 @@
             </div>
             <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-2 col-3 col-form-label">Nội dung : </label>
-                <div class="col-sm-10 col-9" >
+                <div class="col-sm-10 col-9 content-scroll" >
                     <client-only placeholder="loading...">
                         <ckeditor-nuxt v-model="product.content" :config="editorConfig"  />
                     </client-only>
@@ -182,16 +196,16 @@ export default {
                 this.error.push("Giá bán sản phẩm không được để trống");
             }
 
+            if (!this.product.discount) {
+                this.error.push("Giảm giá không được để trống");
+            }
+
             if (!this.product.description) {
                 this.error.push("Mô tả sản phẩm không được để trống");
             }
 
             if (!this.product.content) {
                 this.error.push("Nội dung sản phẩm không được để trống");
-            }
-
-            if (!this.product.qty) {
-                this.error.push("Số lượng sản phẩm không được để trống");
             }
 
             if (!this.product.status) {
@@ -206,7 +220,7 @@ export default {
                     formData.append('category_id', this.product.category_id);
                     formData.append('brand_id', this.product.brand_id);
                     formData.append('price', this.product.price);
-                    formData.append('qty', this.product.qty);
+                    formData.append('discount', this.product.discount);
                     formData.append('retail_price', this.product.retail_price);
                     formData.append('description', this.product.description);
                     formData.append('content', this.product.content);
@@ -251,5 +265,10 @@ export default {
     max-height: 200px;
     height: auto;
     object-fit: cover;
+}
+
+.content-scroll {
+    overflow: scroll;
+    height: 600px;
 }
 </style>
