@@ -75,6 +75,7 @@
                 <thead>
                     <tr>
                         <th scope="col">STT</th>
+                        <th scope="col">Hình ảnh</th>
                         <th scope="col">Tên sản phẩm</th>
                         <th scope="col">Size </th>
                         <th scope="col">Số lượng </th>
@@ -83,6 +84,7 @@
                 <tbody>
                     <tr v-for="(item, key) in receipts" :key="key" v-bind:class="[{bgred: item.qty < 10}]">
                         <th scope="row">{{key+1}}</th>
+                        <td class="product-image"><img :src="'http://127.0.0.1:8000/' + item.image"></td>
                         <td>{{item.name}}</td>
                         <td>{{item.size_value}}</td>
                         <td>{{item.qty}}</td>
@@ -231,7 +233,7 @@ a {
     
 }
 
-.brand-image img {
+.product-image img {
     max-width: 100px;
     height: auto;
     object-fit: cover;

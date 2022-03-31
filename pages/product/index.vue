@@ -52,7 +52,6 @@ export default {
     },
 
     mounted () {
-      // this.fetchProduct(),
       this.loading = true
     },
 

@@ -8,7 +8,7 @@
         <div>
           <MenuHead />
         </div>
-        <div class="pl-5 pr-5 pt-5 pb-0">
+        <div class="pl-5 pr-5 pt-5 pb-5">
           <Dasboard />
           <DasboardRandomChart class="mt-5" />
         </div>
